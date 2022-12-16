@@ -43,10 +43,14 @@ Base *generate(void) {
         return (new C());
 }
 
-// void identify(Base* p)
-// {
-//     std::cout << "Type: " << p->type << std::endl;
-// }
+void identify(Base* p)
+{
+    Base *test;
+
+    test = dynamic_cast<A *>(p);
+    std::cout << "Type: " << p->type << std::endl;
+}
+
 void identify(Base& p)
 {
     std::cout << "Type: " << p.type << std::endl;
