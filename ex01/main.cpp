@@ -1,27 +1,33 @@
 #include <iostream>
+#include <stdint.h>
 
-struct Data_s 
+struct Data_t 
 {
     std::string val;
-} Data;
+    float       small_val;
+};
 
-uintptr_t serialize(Data* ptr)
+uintptr_t serialize(Data_t* ptr)
 {
-    return ();
+    return ((uintptr_t)(void *)ptr);
 }
 
-Data* deserialize(uintptr_t raw)
+Data_t* deserialize(uintptr_t raw)
 {
-    Data *thing;
-
-    return thing;
+    return ((Data_t *) raw);
 }
 
-int main(void)
-{
-    Data    *dat;
-    uintptr_t num;
+// int main(void)
+// {
+//     Data_t  dat;
+//     uintptr_t srl;
 
-    Data->val = "hello";
-
-}
+//     dat.val = "something";
+//     dat.small_val = 15.5555;
+//     std::cout << "start" << std::endl;
+//     srl = serialize(&dat);
+//     std::cout << srl << std::endl;
+//     dat = *(deserialize(srl));
+//     std::cout << dat.val << std::endl;
+//     std::cout << dat.small_val << std::endl;
+// }
