@@ -35,24 +35,39 @@ Base *generate(void) {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dis(1, 10);
     num = dis(gen) % 3;
-    if (num == 0)
+    if (num == 0) {
+        std::cout << "Generated type: A" << std::endl;
         return (new A());
-    else if (num == 1)
+    }
+    else if (num == 1){
+        std::cout << "Generated type: B" << std::endl;
         return (new B());
-    else
+    }
+    else {
+        std::cout << "Generated type: C" << std::endl;
         return (new C());
+    }
 }
 
 void identify(Base* p)
 {
     Base *test;
 
+    std::cout << "Running identify(Base* p)" << std::endl;
     test = dynamic_cast<A *>(p);
-    std::cout << "Type: " << p->type << std::endl;
+    if (test != NULL)
+        std::cout << "Type: " << "A" << std::endl;
+    test = dynamic_cast<B *>(p);
+    if (test != NULL)
+        std::cout << "Type: " << "B" << std::endl;
+    test = dynamic_cast<C *>(p);
+    if (test != NULL)
+        std::cout << "Type: " << "C" << std::endl;
 }
 
 void identify(Base& p)
 {
+    std::cout << "Running identify(Base& p)" << std::endl;
     std::cout << "Type: " << p.type << std::endl;
 }
 
@@ -62,4 +77,5 @@ int main(void)
 
     ptr = generate();
     identify(*ptr);
+    identify(ptr);
 }
