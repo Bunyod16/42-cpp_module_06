@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 int    displayOutput(std::string char_val, std::string int_val, std::string float_val, std::string double_val)
 {
@@ -19,7 +20,7 @@ std::string identifyType(std::string str)
     dot_count = 0;
     while (++i < (int)str.length() && dot_count <= 1)
     {
-        if (std::isdigit(str[i]) == 0) {
+        if (std::isdigit(str[i]) == 0 && (i != 0 && str[i] != '-')) {
             if (str[i] == '.')
                 dot_count++;
             else if (i + 1 == (int)str.length() && dot_count == 1 && str[i] == 'f')
@@ -28,7 +29,12 @@ std::string identifyType(std::string str)
                 return "char";
         }
     }
-    num = std::stod(str);
+    try {
+        num = static_cast<double>(std::stod(str));
+    }
+    catch (std::out_of_range &e){
+        return (str[0] == '-' ? "-inf" : "+inf");
+    }
     if ((num >= INT_MIN && num <= INT_MAX) && dot_count == 0)
         return "int";
     return "double";
@@ -36,18 +42,18 @@ std::string identifyType(std::string str)
 
 int     handle_nan_inf(std::string str)
 {
-    if (str == "-inff")
-        return (displayOutput(str, "Non displayable", "-inff", "-inf"));
-    if (str == "+inff")
-        return (displayOutput(str, "Non displayable", "+inff", "+inf"));
-    if (str == "-inf")
-        return (displayOutput(str, "Non displayable", "-inff", "-inf"));
-    if (str == "+inf")
-        return (displayOutput(str, "Non displayable", "+inff", "+inf"));
+    // if (str == "-inff")
+    //     return (displayOutput("impossible", "Non displayable", "-inff", "-inf"));
+    // if (str == "+inff")
+    //     return (displayOutput("impossible", "Non displayable", "+inff", "+inf"));
+    // if (str == "-inf")
+    //     return (displayOutput("impossible", "Non displayable", "-inff", "-inf"));
+    // if (str == "+inf")
+    //     return (displayOutput("impossible", "Non displayable", "+inff", "+inf"));
     if (str == "nanf")
-        return (displayOutput(str, "Non displayable", "nanf", "nan"));
+        return (displayOutput("impossible", "impossible", "nanf", "nan"));
     if (str == "nan")
-        return (displayOutput(str, "Non displayable", "nanf", "nan"));
+        return (displayOutput("impossible", "impossible", "nanf", "nan"));
     return 0;
 }
 
@@ -55,9 +61,9 @@ void    handle_char(std::string str)
 {
     if (str.length() == 1 && str[0] >= 32 && str[0] <= 127) {
         std::cout << "char: " << "'" + str + "'" << std::endl;
-        std::cout << "int: " << (int)str[0] << std::endl;
-        std::cout << "float: " << (float)str[0] << ".0f" << std::endl;
-        std::cout << "double: " << (double)str[0] << ".0" << std::endl;
+        std::cout << "int: " << static_cast<int>(str[0]) << std::endl;
+        std::cout << "float: " << static_cast<float>(str[0]) << ".0f" << std::endl;
+        std::cout << "double: " << static_cast<double>(str[0]) << ".0" << std::endl;
     }
     else
         displayOutput("impossible", "impossible", "impossible" , "impossible");
@@ -66,49 +72,74 @@ void    handle_char(std::string str)
 void    handle_int(int num)
 {
     if (num >= 32 && num <= 127)
-        std::cout << "char: " << "'" << (char)num << "'" << std::endl;
+        std::cout << "char: " << "'" << static_cast<char>(num) << "'" << std::endl;
     else
         std::cout << "char: " <<  "Non displayable" << std::endl;
     
     std::cout << "int: " << num << std::endl;
-    std::cout << "float: " << (float)num  << ".0f" << std::endl;
-    std::cout << "double: " << (double)num << ".0" << std::endl;
+    std::cout << "float: " << static_cast<float>(num)  << ".0f" << std::endl;
+    std::cout << "double: " << static_cast<double>(num) << ".0" << std::endl;
 }
 
 void    handle_float(float num)
 {
     if (num >= 32 && num <= 127 && num - int(num) == 0)
-        std::cout << "char: " << "'" << (char)num << "'" << std::endl;
+        std::cout << "char: " << "'" << static_cast<char>(num) << "'" << std::endl;
     else
         std::cout << "char: " <<  "Non displayable" << std::endl;
 
     std::cout << "int: " << int(num) << std::endl;
     if (num - int(num) == 0) {
-        std::cout << "float: " << (float)num << ".0f" << std::endl;
-        std::cout << "double: " << (double)num << ".0" << std::endl;
+        std::cout << "float: " << static_cast<float>(num)<< ".0f" << std::endl;
+        std::cout << "double: " << static_cast<double>(num) << ".0" << std::endl;
     }
     else {
-        std::cout << "float: " << (float)num << "f" << std::endl;
-        std::cout << "double: " << (double)num << std::endl;
+        std::cout << "float: " << static_cast<float>(num) << "f" << std::endl;
+        std::cout << "double: " << static_cast<double>(num) << std::endl;
     }
 }
 
 void    handle_double(double num)
 {
-
     if (num >= 32 && num <= 127 && num - int(num) == 0)
-        std::cout << "char: " << "'" << (char)num << "'" << std::endl;
+        std::cout << "char: " << "'" << static_cast<char>(num) << "'" << std::endl;
     else
-        std::cout << "char: " <<  "Non displayable" << std::endl;
+        std::cout << "char: " <<  "impossible" << std::endl;
+    
+    if (num >= INT_MIN && num <= INT_MAX)
+        std::cout << "int: " << static_cast<int>(num) << std::endl;
+    else
+        std::cout << "int: impossible" << std::endl;
 
-    std::cout << "int: " << int(num) << std::endl;
-    if (num - int(num) == 0) {
-        std::cout << "float: " << (float)num << ".0f" << std::endl;
-        std::cout << "double: " << (double)num << ".0" << std::endl;
+    if (std::isinf(num))
+    {
+        std::cout << "float: +inff" << std::endl;
+        std::cout << "double: +inf" << std::endl;
+    }
+    if (std::isnan(num))
+    {
+        std::cout << "float: nanf" << std::endl;
+        std::cout << "double: nan" << std::endl;
+    }
+    if (!std::isinf(num) && !std::isnan(num)) {
+        std::cout << "float: " << static_cast<float>(num) << "f" << std::endl;
+        std::cout << "double: " << static_cast<double>(num) << std::endl;
+    }
+}
+
+void    handle_inf(std::string str)
+{
+    if (str[1] == '-') {
+        std::cout << "char: impossible" << std::endl;
+        std::cout << "int: impossible" << std::endl;
+        std::cout << "float: -inff" << std::endl;
+        std::cout << "double: -inf" << std::endl;
     }
     else {
-        std::cout << "float: " << (float)num << "f" << std::endl;
-        std::cout << "double: " << (double)num << std::endl;
+        std::cout << "char: impossible" << std::endl;
+        std::cout << "int: impossible" << std::endl;
+        std::cout << "float: +inff" << std::endl;
+        std::cout << "double: +inf" << std::endl;
     }
 }
 
@@ -132,5 +163,7 @@ int main(int argc, char **argv)
         handle_float(std::stof(argv[1]));
     if (type == "double")
         handle_double(std::stod(argv[1]));
+    if (type == "-inf" || type == "+inf")
+        handle_inf(argv[1]);
     return 1;
 }
