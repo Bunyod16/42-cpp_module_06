@@ -2,31 +2,8 @@
 #include <cstdlib>
 #include <ctime>
 #include <random>
+#include "Base.hpp"
 
-class Base {
-    public:
-        Base(std::string type) : type(type) {}
-        virtual ~Base() {}
-        std::string type;
-};
-
-class A: public Base {
-    public:
-        A() : Base("A") {}
-        ~A() {}
-};
-
-class B: public Base {
-    public:
-        B() : Base("B") {}
-        ~B() {}
-};
-
-class C: public Base {
-    public:
-        C() : Base("C") {}
-        ~C() {}
-};
 
 Base *generate(void) {
     int num;
@@ -67,8 +44,40 @@ void identify(Base* p)
 
 void identify(Base& p)
 {
+    Base *test;
+    int i;
+
     std::cout << "Running identify(Base& p)" << std::endl;
-    std::cout << "Type: " << p.type << std::endl;
+    i = 0;
+    try {
+        test = &(dynamic_cast<A &>(p));
+        i = 1;
+    }
+    catch (std::exception &e) {
+    }
+    try {
+        test = &(dynamic_cast<B &>(p));
+        i = 2;
+    }
+    catch (std::exception &e) {
+    }
+    try {
+        test = &(dynamic_cast<C &>(p));
+        i = 3;
+    }
+    catch (std::exception &e) {
+    }
+    switch (i) {
+        case 1:
+            std::cout << "Type: " << "A" << std::endl;
+            break;
+        case 2:
+            std::cout << "Type: " << "B" << std::endl;
+            break;
+        case 3:
+            std::cout << "Type: " << "C" << std::endl;
+            break;
+    }
 }
 
 int main(void)

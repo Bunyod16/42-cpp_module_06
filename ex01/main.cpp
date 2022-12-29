@@ -9,7 +9,7 @@ struct Data_t
 
 uintptr_t serialize(Data_t* ptr)
 {
-    return ((uintptr_t)(void *)ptr);
+    return (reinterpret_cast<uintptr_t>(ptr));
 }
 
 Data_t* deserialize(uintptr_t raw)
@@ -28,8 +28,8 @@ int main(void)
     srl = serialize(&dat);
     std::cout << "Serialized value: " << srl << std::endl;
     dat_2 = *(deserialize(srl));
-    std::cout << dat.val << std::endl;
-    std::cout << dat.small_val << std::endl;
+    dat.val = "ERROR";
+    dat.small_val = 99.9;
     std::cout << dat_2.val << std::endl;
     std::cout << dat_2.small_val << std::endl;
 }

@@ -60,7 +60,7 @@ void    handle_char(std::string str)
         std::cout << "double: " << (double)str[0] << ".0" << std::endl;
     }
     else
-        displayOutput(str, "impossible", "impossible" , "impossible");
+        displayOutput("impossible", "impossible", "impossible" , "impossible");
 }
 
 void    handle_int(int num)
